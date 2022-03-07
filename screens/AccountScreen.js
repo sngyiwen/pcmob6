@@ -24,7 +24,7 @@ export default function AccountScreen({ navigation }) {
   const sizeInterpolation = {
     inputRange: [0, 0.5, 1],
     outputRange: [200, 300, 200],
-  }
+  };
 
   // const styles = { ...commonStyles, ...lightStyles };
   const token = useSelector((state) => state.auth.token);
@@ -61,29 +61,28 @@ export default function AccountScreen({ navigation }) {
     }
   }
 
-function changePicSize() {
-  Animated.loop(
-    Animated.sequence([
-      Animated.timing(picSize,{
-        toValue: 1,
-        duration: 2500,
-        useNativeDriver: false
-      }),
-      Animated.timing(picSize, {
-        toValue: 200,
-        duration: 2500,
-        useNativeDriver: false
-      })
-    ])
-  ).start()
+  function changePicSize() {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(picSize, {
+          toValue: 1,
+          duration: 2500,
+          useNativeDriver: false,
+        }),
+        Animated.timing(picSize, {
+          toValue: 200,
+          duration: 2500,
+          useNativeDriver: false,
+        }),
+      ])
+    ).start();
 
-  // Animated.spring(picSize, {
-  //   toValue: 300,
-  //   duration: 2500,
-  //   useNativeDriver: false
-  // }).start();
- 
-}
+    // Animated.spring(picSize, {
+    //   toValue: 300,
+    //   duration: 2500,
+    //   useNativeDriver: false
+    // }).start();
+  }
 
   function signOut() {
     // AsyncStorage.removeItem("token");
@@ -110,26 +109,46 @@ function changePicSize() {
 
   return (
     <View style={[styles.container, { alignItems: "center" }]}>
-      <Text style={[styles.title, styles.text, { margin: 30 }]}> Hello {username} !</Text>
-      {profilePicture == null ? <View /> :
-        <TouchableWithoutFeedback onPress={changePicSize}>
-          <Animated.Image style={{ width: picSize.interpolate(sizeInterpolation), height: picSize.interpolate(sizeInterpolation), borderRadius: 200 }} source={{ uri: profilePicture?.uri }} />
-        </TouchableWithoutFeedback>
-      }
+      <Text style={[styles.title, styles.text, { margin: 30 }]}>
+        {" "}
+        Hello {username} !{" "}
+      </Text>
+      <View style={{height: profilePicture == null ? 0:320, justifyContent: "center"}}>
+        {profilePicture == null ? (
+          <View />
+        ) : (
+          <TouchableWithoutFeedback onPress={changePicSize}>
+            <Animated.Image
+              style={{
+                width: picSize.interpolate(sizeInterpolation),
+                height: picSize.interpolate(sizeInterpolation),
+                borderRadius: 200,
+              }}
+              source={{ uri: profilePicture?.uri }}
+            />
+          </TouchableWithoutFeedback>
+        )}
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-          <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}> No profile picture. Click to take one. </Text>
-          </TouchableOpacity>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", margin: 20}}>
+        <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
+          {" "}
+          No profile picture. Click to take one.{" "}
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 20,
+        }}
+      >
         <Text style={[styles.content, styles.text]}> Dark Mode? </Text>
-        <Switch
-          value={isDark}
-          onChange={switchMode}/>
+        <Switch value={isDark} onChange={switchMode} />
       </View>
       <TouchableOpacity style={[styles.button]} onPress={signOut}>
-        <Text style={styles.buttonText}>
-          Sign Out
-        </Text>
-        </TouchableOpacity>
+        <Text style={styles.buttonText}>Sign Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
